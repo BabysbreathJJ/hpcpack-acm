@@ -1,5 +1,6 @@
 FROM hpcacmbuild.azurecr.io/public/hpcpack/hpcacm:latest as final
 EXPOSE 5000
 WORKDIR /app/Frontend
+COPY portal/dist /app/Frontend/wwwroot
 ENTRYPOINT ["/bin/bash", "/app/scripts/start-frontend.sh"]
 
