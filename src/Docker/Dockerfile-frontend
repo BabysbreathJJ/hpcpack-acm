@@ -1,4 +1,4 @@
-FROM hpcacmbuild.azurecr.io/public/hpcpack/hpcacm:latest as final
+FROM jjtest.azurecr.io/public/hpcpack/hpcacm:latest as final
 EXPOSE 5000
 WORKDIR /app/Frontend
 COPY portal/dist /app/Frontend/wwwroot

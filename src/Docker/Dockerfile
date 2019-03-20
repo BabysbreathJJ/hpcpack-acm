@@ -1,4 +1,4 @@
-FROM hpcacmbuild.azurecr.io/public/hpcpack/hpcacm/runtime AS final
+FROM jjtest.azurecr.io/public/hpcpack/hpcacm/runtime AS final
 WORKDIR /app/scripts
 COPY Docker/scripts/* ./
 WORKDIR /app

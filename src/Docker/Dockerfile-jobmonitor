@@ -1,4 +1,4 @@
-FROM hpcacmbuild.azurecr.io/public/hpcpack/hpcacm:latest as final
+FROM jjtest.azurecr.io/public/hpcpack/hpcacm:latest as final
 WORKDIR /app/JobMonitor
 ENTRYPOINT ["dotnet", "JobMonitor.dll"]
 
