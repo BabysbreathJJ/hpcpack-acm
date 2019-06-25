@@ -103,6 +103,10 @@
 
         public static T.Task<CloudQueue> GetOrCreateNodeCancelQueueAsync(this CloudUtilities u, string nodeName, CancellationToken token) => u.GetOrCreateQueueAsync(string.Format(u.Option.NodeCancelQueuePattern, nodeName), token);
 
+        public static T.Task<CloudQueue> GetOrCreateManagementRequestQueueAsync(this CloudUtilities u, CancellationToken token) => u.GetOrCreateQueueAsync(u.Option.ManagementRequestQueue, token);
+
+        public static T.Task<CloudQueue> GetOrCreateManagementResponseQueueAsync(this CloudUtilities u, string Id, CancellationToken token) => u.GetOrCreateQueueAsync(string.Format(u.Option.ManagementResponseQueue, Id), token);
+
         public static CloudTable GetMetricsTable(this CloudUtilities u) => u.GetTable(u.Option.MetricsTableName);
 
         public static T.Task<CloudTable> GetOrCreateMetricsTableAsync(this CloudUtilities u, CancellationToken token) => u.GetOrCreateTableAsync(u.Option.MetricsTableName, token);
@@ -110,6 +114,8 @@
         public static CloudTable GetNodesTable(this CloudUtilities u) => u.GetTable(u.Option.NodesTableName);
 
         public static T.Task<CloudTable> GetOrCreateNodesTableAsync(this CloudUtilities u, CancellationToken token) => u.GetOrCreateTableAsync(u.Option.NodesTableName, token);
+
+        public static T.Task<CloudTable> GetOrCreateManagementOperationTableAsync(this CloudUtilities u, CancellationToken token) => u.GetOrCreateTableAsync(u.Option.ManagementOperataionTableName, token);
 
         public static T.Task<bool> UpdateTaskAsync(this CloudUtilities u, string jobPartitionKey, string taskKey, Action<Task> action, CancellationToken token, ILogger logger = null) =>
             u.UpdateObjectAsync(u.GetJobsTable(), jobPartitionKey, taskKey, action, token, logger);
@@ -326,6 +332,21 @@
             var childIdBlob = u.GetAppendBlob(u.Option.TaskChildrenContainerName, taskKey);
             var content = await childIdBlob.DownloadTextAsync(Encoding.UTF8, null, null, null, token);
             return JsonConvert.DeserializeObject<List<int>>(content);
+        }
+
+        public static async T.Task<IEnumerable<GroupWithNodes>> GetNodeGroupsAsync(this CloudUtilities utilities, CancellationToken token)
+        {
+            var table = await utilities.GetOrCreateNodesTableAsync(token);
+            var query = TableQuery.GenerateFilterCondition(CloudUtilities.PartitionKeyName, QueryComparisons.Equal, utilities.GroupsPartitionKey);
+            var result = await table.QueryAsync<GroupWithNodes>(query, null, token);
+            return result.Select(e => e.Item3);
+        }
+
+        public static async T.Task<GroupWithNodes> GetNodeGroupAsync(this CloudUtilities utilities, int groupId, CancellationToken token)
+        {
+            var table = await utilities.GetOrCreateNodesTableAsync(token);
+            var result = await table.RetrieveAsync<GroupWithNodes>(utilities.GroupsPartitionKey, utilities.GetGroupKey(groupId), token);
+            return result;
         }
     }
 }

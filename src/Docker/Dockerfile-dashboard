@@ -1,4 +1,3 @@
 FROM jjtest.azurecr.io/public/hpcpack/hpcacm:latest as final
 WORKDIR /app/Dashboard
 ENTRYPOINT ["dotnet", "Dashboard.dll"]
-

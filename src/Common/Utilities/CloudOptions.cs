@@ -50,11 +50,21 @@ namespace Microsoft.HpcAcm.Common.Utilities
         public string RegistrationPattern { get; set; } = "registration-{0}";
         public string HeartbeatPattern { get; internal set; } = "heartbeat-{0}";
         public string NodesPartitionKey { get; internal set; } = "nodes";
+        public string GroupsPartitionKey { get; internal set; } = "groups";
+        public string GroupPattern { get; set; } = "group-{0}";
 
         public int HeartbeatIntervalSeconds { get; set; } = 30;
         public int MaxMissedHeartbeats { get; set; } = 3;
         public int RegistrationIntervalSeconds { get; set; } = 300;
         public int RetryOnFailureSeconds { get; set; } = 5;
+
+        #endregion
+
+        #region Management Operation table
+
+        public string ManagementOperataionTableName { get; set; } = "managementoperationtable";
+        public string ManagementRequestRowKey { get; internal set; } = "request";
+        public string ManagementResponseRowKey { get; internal set; } = "response";
 
         #endregion
 
@@ -91,6 +101,9 @@ namespace Microsoft.HpcAcm.Common.Utilities
         public string ScriptSyncQueueName { get; set; } = "scriptsyncqueue";
         public string NodeDispatchQueuePattern { get; set; } = "nodedispatchqueue-{0}";
         public string NodeCancelQueuePattern { get; set; } = "nodecancelqueue-{0}";
+        public string ManagementRequestQueue { get; set; } = "management-request";
+        public string ManagementResponseQueue { get; set; } = "management-response-{0}";
+
 
         #endregion
     }
